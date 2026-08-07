@@ -340,8 +340,17 @@ def _kill_stale_switches() -> None:
                 capture_output=True, text=True, timeout=5,
             )
             for line in result.stdout.splitlines():
-                if line.strip().startswith(prefix):
-                    iface = line.strip().split(":")[1].strip().split("@")[0]
+                # ip link output format: "688: s1_h1@if687: <BROADCAST,...>"
+                stripped = line.strip()
+                if ":" not in stripped:
+                    continue
+                # Extract iface name from "index: iface@peer: <flags>"
+                parts = stripped.split(":", 2)
+                if len(parts) < 2:
+                    continue
+                iface_raw = parts[1].strip()
+                iface = iface_raw.split("@")[0]
+                if iface.startswith(prefix):
                     subprocess.run(
                         ["ip", "link", "delete", iface],
                         timeout=5, check=False,
