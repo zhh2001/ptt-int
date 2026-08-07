@@ -175,11 +175,13 @@ def run_calibration(output_dir, bottleneck_rate_pps=100, duration_s=15, warmup_s
             # Use the actual_time_ns field within the measurement window
             # (excluding warmup) for a scientifically rigorous rate measurement.
             sender_count = 0
+            total_sent = 0
             tx_rate_pps = 0.0
             try:
                 sender_log = os.path.join(tmpdir, "traffic", "h1_sender_log.csv")
                 with open(sender_log) as f:
                     sender_rows = list(csv.DictReader(f))
+                total_sent = len(sender_rows)
                 # Convert actual_time_ns to seconds since first packet
                 t0_ns = int(sender_rows[0]["actual_time_ns"]) if sender_rows else 0
                 tx_ts_in_window = []
@@ -192,29 +194,42 @@ def run_calibration(output_dir, bottleneck_rate_pps=100, duration_s=15, warmup_s
                     span = tx_ts_in_window[-1] - tx_ts_in_window[0]
                     tx_rate_pps = sender_count / span if span > 0 else 0.0
             except Exception:
-                sender_count = sum(r["count"] for r in exec_result.get("sender_results", {}).values())
-                tx_rate_pps = receiver_count / duration_s if duration_s > 0 else 0.0
+                total_sent = sum(r["count"] for r in exec_result.get("sender_results", {}).values())
+                sender_count = total_sent
+                tx_rate_pps = sender_count / duration_s if duration_s > 0 else 0.0
 
             # --- Compute actual RX rate from pcap timestamps (UDP only) ---
             rx_rate_pps = 0.0
+            total_received = 0
+            received = 0
             try:
                 import re as _re
                 r = sp.run(["tcpdump", "-r", pcap_path, "-tt", "-nn", "udp"],
                            capture_output=True, text=True, timeout=10)
                 ts_pat = _re.compile(r"^(\d+\.\d+)")
-                rx_ts = []
+                rx_ts_all = []
                 for line in r.stdout.splitlines():
                     m = ts_pat.match(line.strip())
                     if m:
-                        rx_ts.append(float(m.group(1)))
-                if len(rx_ts) >= 2:
-                    span = rx_ts[-1] - rx_ts[0]
-                    rx_rate_pps = len(rx_ts) / span if span > 0.01 else 0.0
-                received = len(rx_ts)
+                        rx_ts_all.append(float(m.group(1)))
+                total_received = len(rx_ts_all)
+                # Filter to measurement window: exclude first warmup_s seconds
+                # (pcap timestamps are Unix epoch — use relative offset from first pkt)
+                if rx_ts_all:
+                    rx_t0 = rx_ts_all[0]
+                    rx_ts_in_window = []
+                    for ts in rx_ts_all:
+                        t_rel = ts - rx_t0
+                        if warmup_s - 0.5 <= t_rel <= warmup_s + duration_s + 0.5:
+                            rx_ts_in_window.append(ts)
+                    received = len(rx_ts_in_window)
+                    if len(rx_ts_in_window) >= 2:
+                        span = rx_ts_in_window[-1] - rx_ts_in_window[0]
+                        rx_rate_pps = received / span if span > 0.01 else 0.0
             except Exception:
                 pass
 
-            packet_loss = sender_count - received if sender_count > 0 else 0
+            packet_loss = total_sent - total_received if total_sent > 0 else 0
 
             # Checks
             checks = []
