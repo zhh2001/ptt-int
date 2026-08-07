@@ -15,7 +15,7 @@ prediction, and a QUIET/WATCH/BURST three-state FSM with hysteresis.
 - BMv2 simple_switch 1.15.0
 - Mininet 2.3.0
 - Python 3.12.3
-- Linux (WSL2)
+- Ubuntu 24.04.4 LTS (WSL2)
 
 ## Quick Start
 
