@@ -198,6 +198,7 @@ class TestBmv2Smoke(unittest.TestCase):
         s1_proc = subprocess.Popen(
             ["simple_switch",
              "--log-file", s1_log_base,
+             "--log-level", "info",
              "-i", "0@s1_h1", "-i", "1@s1_s2",
              "--thrift-port", "9090", "--device-id", "0",
              "--pcap", s1_pcap,
