@@ -38,6 +38,8 @@ tmp/
 *.tmp
 /tmp/
 
+*.bak
+
 # Jupyter
 .ipynb_checkpoints/
 
