@@ -633,6 +633,7 @@ class SwitchManager:
         cmd = [
             "simple_switch",
             "--log-file", log_base,
+            "--log-level", "info",
             *iface_args,
             "--thrift-port", str(thrift_port),
             "--device-id", str(device_id),
