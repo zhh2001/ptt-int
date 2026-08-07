@@ -28,7 +28,7 @@ class TestHeaderConstants(unittest.TestCase):
         self.assertEqual(len(STATE_NAMES), 3)
 
     def test_reason_names(self):
-        """Reason codes match DESIGN.md Section 10."""
+        """Reason codes."""
         self.assertEqual(REASON_NAMES[0], "PERIODIC_QUIET")
         self.assertEqual(REASON_NAMES[1], "PERIODIC_WATCH")
         self.assertEqual(REASON_NAMES[2], "PREDICTIVE_NEAR")

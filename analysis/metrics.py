@@ -70,14 +70,14 @@ def read_events(events_csv: str) -> list[dict]:
     return rows
 
 
-# --- Metric Functions (Section 24) ---
+# --- Metric Functions ---
 
 def compute_lead_times(
     oracle: list[dict],
     telemetry: list[dict],
     events: list[dict],
 ) -> dict:
-    """Compute burst and watch lead times per event (Section 24.1).
+    """Compute burst and watch lead times per event.
 
     Lead time = t_event - t_BURST (positive = ahead of event).
     """
@@ -148,7 +148,7 @@ def compute_predictive_precision_recall(
     near_horizon: int = 2,
     epoch_us: int = 5000,
 ) -> dict:
-    """Compute predictive precision, recall, and F1 (Sections 24.2-24.4).
+    """Compute predictive precision, recall, and F1.
 
     A predictive BURST entry is TP if:
       - q < Q_EVENT at entry time
@@ -221,7 +221,7 @@ def compute_early_coverage(
     events: list[dict],
     burst_lead_times: list[int],
 ) -> float:
-    """Compute early-event coverage (Section 24.5).
+    """Compute early-event coverage.
 
     Fraction of events with positive burst lead time.
     """
@@ -238,7 +238,7 @@ def compute_telemetry_overhead(
     shim_bytes: int = 8,
     hop_record_bytes: int = 12,
 ) -> dict:
-    """Compute telemetry byte overhead, instrumented ratio, hop rate (Sections 24.6-24.8)."""
+    """Compute telemetry byte overhead, instrumented ratio, hop rate."""
     instrumented_packets = set()
     total_hop_records = 0
     total_telemetry_bytes = 0
@@ -276,7 +276,7 @@ def compute_telemetry_overhead(
 
 
 def compute_state_occupancy(oracle: list[dict]) -> dict:
-    """Compute state occupancy: fraction of time in QUIET/WATCH/BURST (Section 24.9)."""
+    """Compute state occupancy: fraction of time in QUIET/WATCH/BURST."""
     if not oracle:
         return {"P_QUIET": 1.0, "P_WATCH": 0.0, "P_BURST": 0.0, "total_epochs": 0}
 
@@ -303,7 +303,7 @@ def compute_nmae(
     telemetry: list[dict],
     q_cap: int = 128,
 ) -> dict:
-    """Compute NMAE of reconstructed queue (Section 24.10).
+    """Compute NMAE of reconstructed queue.
 
     Uses last-sample-hold: q_hat(t) = q(last_report_at_or_before_t).
     """
@@ -352,7 +352,7 @@ def compute_peak_error(
     oracle: list[dict],
     telemetry: list[dict],
 ) -> dict:
-    """Compute peak queue error (Section 24.11)."""
+    """Compute peak queue error."""
     if not oracle or not telemetry:
         return {"peak_error": None, "peak_q_true": 0, "peak_q_hat": 0}
 
@@ -402,7 +402,7 @@ def compute_event_window_density(
     events: list[dict],
     window_us: int = 100000,  # 100ms window around event
 ) -> dict:
-    """Compute event-window sample density (Section 24.12)."""
+    """Compute event-window sample density."""
     if not events:
         return {"event_window_density_per_ms": 0.0, "background_density_per_ms": 0.0}
 

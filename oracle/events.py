@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Oracle event detection from oracle.csv.
 
-Based on DESIGN.md Section 15.1:
-  - Congestion event starts when q >= Q_EVENT
-  - Event ends when q < Q_RELEASE
-  - New event can't start until release is observed
+- Congestion event starts when q >= Q_EVENT
+- Event ends when q < Q_RELEASE
+- New event can't start until release is observed
 """
 
 import sys

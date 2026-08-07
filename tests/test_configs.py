@@ -104,7 +104,7 @@ class TestConfigConsistency(unittest.TestCase):
         q = self.config["queue"]
         ratio_event = q["event_threshold_packets"] / q["capacity_packets"]
         ratio_release = q["release_threshold_packets"] / q["capacity_packets"]
-        # DESIGN.md: Q_EVENT = 0.75 * Q_cap, Q_RELEASE = 0.5 * Q_cap
+        # Q_EVENT = 0.75 * Q_cap, Q_RELEASE = 0.5 * Q_cap
         self.assertAlmostEqual(ratio_event, 0.75, delta=0.05)
         self.assertAlmostEqual(ratio_release, 0.50, delta=0.05)
 
