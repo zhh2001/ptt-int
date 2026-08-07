@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Experiment results (large binary artifacts)
+results/
+tmp/
+*.pcap
+*.pcapng
+
+# BMv2 switch logs
+*.log
+*.log.txt
+
+# Temporary / test output
+*.tmp
+/tmp/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Compiled P4 (keep the committed version; rebuild locally)
+# p4src/ptt_int.json  —  uncomment if you prefer to rebuild from source
+
+# Coverage
+htmlcov/
+.coverage
+coverage.xml
+
+# Environment
+.env
+.env.local
