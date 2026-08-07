@@ -232,13 +232,14 @@ class TestBmv2Smoke(unittest.TestCase):
         ])
 
         # s1: unlimited; s2: 100 pps bottleneck
+        # NOTE: BMv2 CLI syntax is "set_queue_depth <nb_pkts> [<port>]" — depth FIRST
         cls._cli_cmd(9090, [
-            "set_queue_depth 0 128", "set_queue_rate 0 0",
-            "set_queue_depth 1 128", "set_queue_rate 1 0",
+            "set_queue_depth 128 0", "set_queue_rate 0 0",
+            "set_queue_depth 128 1", "set_queue_rate 0 1",
         ])
         cls._cli_cmd(9091, [
-            "set_queue_depth 0 128", "set_queue_rate 0 100",
-            "set_queue_depth 1 128", "set_queue_rate 1 100",
+            "set_queue_depth 128 0", "set_queue_rate 100 0",
+            "set_queue_depth 128 1", "set_queue_rate 100 1",
         ])
 
         cls._topology_started = True
