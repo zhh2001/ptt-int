@@ -259,13 +259,13 @@ def run_calibration(output_dir, bottleneck_rate_pps=100, duration_s=15, warmup_s
                               "tx_rate_pps": round(tx_rate_pps, 1),
                               "rx_rate_pps": round(rx_rate_pps, 1),
                               "stats": stats, "checks": checks, "all_pass": all_pass,
-                              "packets_sent": sender_count, "packets_received": received,
+                              "packets_sent": total_sent, "packets_received": total_received,
                               "packet_loss": packet_loss}
             all_series[label] = {"timestamps_s": timestamps_s, "q_values": q_values}
 
             status = "PASS" if all_pass else "FAIL"
             print(f"  {label}: {status} tx_rate={tx_rate_pps:.1f} pps rx_rate={rx_rate_pps:.1f} pps "
-                  f"sent={sender_count} recv={received} loss={packet_loss} "
+                  f"sent={total_sent} recv={total_received} loss={packet_loss} "
                   f"median={stats['median']} peak={stats['peak']} "
                   f"p95={stats['p95']} p99={stats['p99']} "
                   f"slope={stats['slope']:.2f} xings={stats['threshold_crossings']} n={stats['n']}")
