@@ -1,4 +1,2 @@
 scapy>=2.5.0
 pyyaml>=6.0
-numpy>=1.24.0
-matplotlib>=3.6.0
