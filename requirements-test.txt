@@ -1,0 +1,3 @@
+-r requirements.txt
+nnpy>=1.4.2
+# BMv2-generated bm_runtime and sswitch_runtime modules must be importable.

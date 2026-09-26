@@ -1,17 +1,11 @@
-.PHONY: all build test smoke clean
-
+.PHONY: all build test integration check clean
 all: build
-
 build:
 	bash scripts/build.sh
-
 test:
-	python3 -m unittest discover -s tests -v
-
-smoke: build
-	bash scripts/run_smoke.sh
-
+	python3 -m unittest discover -s tests -p 'test_*.py' -v
+integration: build
+	python3 -m unittest discover -s tests -p 'bmv2_*.py' -v
+check: test integration
 clean:
-	rm -f p4src/ptt_int.json
-	rm -rf results/raw/*
-	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	rm -rf build
