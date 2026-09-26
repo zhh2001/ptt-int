@@ -1,86 +1,22 @@
-# PTT-INT: Default Configuration
-# Single source of truth for all tunable parameters.
-# Generated P4 constants (p4src/generated_params.p4) are produced from this file.
-
-# --- Queue Configuration ---
+# PTT-INT defaults
 queue:
-  capacity_packets: 128       # Q_cap
-  event_threshold_packets: 96 # Q_EVENT (0.75 * Q_cap)
-  release_threshold_packets: 64 # Q_RELEASE (0.5 * Q_cap)
-
-# --- Predictor Parameters ---
+  capacity_packets: 128
+  event_threshold_packets: 96
+  release_threshold_packets: 64
 predictor:
-  epoch_us: 5000              # W: measurement epoch in microseconds
-  ewma_alpha_shift: 2         # alpha = 1/4, implemented as >> 2
-  q8_scale: 256               # Q8 fixed-point scale
-  near_horizon: 2             # H_N: epochs
-  far_horizon: 8              # H_F: epochs
-
-# --- State Machine ---
+  epoch_us: 5000
+  ewma_alpha_shift: 2
+  near_horizon: 2
+  far_horizon: 8
 fsm:
-  recovery_epochs: 3          # M: consecutive lower-target epochs for hysteresis
-  gap_reset_multiple: 4       # T_gap = gap_reset_multiple * W
-  idle_reset_multiple: 20     # T_idle = idle_reset_multiple * W
-
-# --- Sampling Rates (bit mask widths) ---
+  recovery_epochs: 3
+  gap_reset_multiple: 4
+  idle_reset_us: 100000
 sampling:
-  quiet_mask: 0x1f            # 1/32: (counter & 0x1f) == 0
-  watch_mask: 0x03            # 1/4:  (counter & 0x03) == 0
-  burst_all: true             # 1/1:  always emit
-
-# --- Freshness ---
+  quiet_mask: 31
+  watch_mask: 3
 freshness:
-  max_silence_us: 100000      # T_max: 100 ms
-
-# --- Packet Format ---
+  max_silence_us: 100000
 packet:
-  int_port: 32768             # INT_PORT: reserved UDP destination port
-  data_port: 65534            # DATA_PORT: default UDP destination port for traffic
-  max_hops: 8                 # MAX_HOPS
-  magic: 0x5054               # PTT shim magic number
-  version: 1
-  original_packet_size: 1000  # bytes (UDP payload before INT encapsulation)
-  shim_bytes: 8
-  hop_record_bytes: 12
-  max_telemetry_bytes: 104    # 8 + 8*12
-
-# --- Experiment ---
-experiment:
-  default_duration_s: 30
-  default_seeds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-  bmv2_thrift_base_port: 9090
-  bmv2_device_id: 0
-  mininet_mtu: 2000
-
-# --- Scheme Modes ---
-# 0 = FULL, 1 = PERIODIC_4, 2 = PERIODIC_16, 3 = PERIODIC_32,
-# 4 = REACTIVE, 5 = DELTA, 6 = PTT, 7 = BYPASS (diagnostic only)
-schemes:
-  FULL: 0
-  PERIODIC_4: 1
-  PERIODIC_16: 2
-  PERIODIC_32: 3
-  REACTIVE: 4
-  DELTA: 5
-  PTT: 6
-  BYPASS: 7
-
-# --- Baseline Sampling Periods ---
-periodic:
-  period_4: 4
-  period_16: 16
-  period_32: 32
-
-# --- Delta Trigger ---
-delta:
-  threshold_packets: 10       # Delta_Q: report when |q - q_last_report| >= this
-
-# --- Switch IDs ---
-topology:
-  switch_ids:
-    s1: 1
-    s2: 2
-    s3: 3
-    s4: 4
-    s5: 5
-    s6: 6
+  int_port: 32768
+  max_hops: 8
